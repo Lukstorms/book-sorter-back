@@ -10,7 +10,7 @@ const fazerBusca = async (req, res) => {
 
         const alea = Math.floor(Math.random() * 20);
         const work = data.works[alea];
-
+        console.log(alea);    
         const livro = await axios.get(`https://openlibrary.org/works/${work.cover_edition_key}`).then(({data}) => {
             return data
         })
