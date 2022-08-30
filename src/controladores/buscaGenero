@@ -1,33 +1,36 @@
 const axios =  require('axios').default
 
 const fazerBusca = async (req, res) => {
-    
-    
-    try {
-        const {genero} = req.params
-        console.log('rodei');
-        console.log(genero);
-        const {data} = await axios.get(           
-           `http://openlibrary.org/subjects/${genero}.json`
-        );
-        const x = 6
-               
+    const {genero} = req.params;
 
+    try {
+        const {data} = await axios.get(           
+           `http://openlibrary.org/subjects/${genero}.json?limit=200`
+        );
+
+        const alea = Math.floor(Math.random() * 100);
+        const work = data.works[alea];
+
+        const livro = await axios.get(`https://openlibrary.org/works/${work.cover_edition_key}`).then(({data}) => {
+            return data
+        })
 
         const result = {
-            título: data.works[x].title,
-            autor: data.works[x].authors[0].name,
-            primeira_publicação: data.works[x].first_publish_year,
+            título: work.title,
+            autor: work.authors[0].name,
+            primeira_publicação: livro.publish_date,
+            numero_paginas: livro.number_of_pages,
+            descricao: livro.description || null,
             capa: {
-                id_capa: data.works[x].cover_id,
-                key_cover: data.works[x].cover_edition_key //OLID
+                id_capa: work.cover_id,
+                key_cover: work.cover_edition_key
             }
         }
+
         return res.status(200).json(result);
-    } catch (error) {  
-        console.log('deu ruim');      
-        return res.status(400).json(error)
+    } catch (error) {      
+        return res.status(400).json(error.message);
     }
 }
 
-module.exports = fazerBusca
+module.exports = fazerBusca;
