@@ -16,9 +16,9 @@ const fazerBusca = async (req, res) => {
         })
 
         const result = {
-            título: work.title,
+            titulo: work.title,
             autor: work.authors[0].name,
-            primeira_publicação: livro.publish_date,
+            primeira_publicacao: livro.publish_date,
             numero_paginas: livro.number_of_pages,
             descricao: livro.description || null,
             capa: {
