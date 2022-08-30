@@ -8,7 +8,7 @@ const fazerBusca = async (req, res) => {
            `http://openlibrary.org/subjects/${genero}.json?limit=50`
         );
 
-        const alea = Math.floor(Math.random() * 50);
+        const alea = Math.floor(Math.random() * 20);
         const work = data.works[alea];
 
         const livro = await axios.get(`https://openlibrary.org/works/${work.cover_edition_key}`).then(({data}) => {
