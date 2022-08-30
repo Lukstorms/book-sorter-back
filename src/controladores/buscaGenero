@@ -10,12 +10,19 @@ const fazerBusca = async (req, res) => {
         const {data} = await axios.get(           
            `http://openlibrary.org/subjects/${genero}.json`
         );
-        
+        const x = 6
+               
+
+
         const result = {
-            título: data.works[6].title,
-            autor: data.works[6].authors[0].name,
+            título: data.works[x].title,
+            autor: data.works[x].authors[0].name,
+            primeira_publicação: data.works[x].first_publish_year,
+            capa: {
+                id_capa: data.works[x].cover_id,
+                key_cover: data.works[x].cover_edition_key //OLID
+            }
         }
-        console.log(result); 
         return res.status(200).json(result);
     } catch (error) {  
         console.log('deu ruim');      
