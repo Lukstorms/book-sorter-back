@@ -1,4 +1,4 @@
-const axios =  require('axios').default
+const axios =  require('axios').default;
 
 const fazerBusca = async (req, res) => {
     const {genero} = req.params;
@@ -8,19 +8,35 @@ const fazerBusca = async (req, res) => {
            `http://openlibrary.org/subjects/${genero}.json?limit=50`
         );
 
-        const alea = Math.floor(Math.random() * 20);
+        const alea = Math.floor(Math.random() * 30);
         const work = data.works[alea];
-        console.log(alea);    
-        const livro = await axios.get(`https://openlibrary.org/works/${work.cover_edition_key}`).then(({data}) => {
+        
+        const bookDetails= await axios.get(`https://openlibrary.org/works/${work.cover_edition_key}`).then(({data}) => {
             return data
-        })
+        });
+        
+        const descriptionType = typeof bookDetails.description;
+
+        let description;
+
+        switch (descriptionType) {
+            case 'string':
+                description = bookDetails.description;
+                break
+            case 'object':
+                description = bookDetails.description.value;
+                break
+            case 'undefined':
+                description = null
+                break
+        }
 
         const result = {
             titulo: work.title,
             autor: work.authors[0].name,
-            primeira_publicacao: livro.publish_date,
-            numero_paginas: livro.number_of_pages,
-            descricao: livro.description || null,
+            primeira_publicacao: bookDetails.publish_date,
+            numero_paginas: bookDetails.number_of_pages,
+            descricao: description,
             capa: {
                 id_capa: work.cover_id,
                 key_cover: work.cover_edition_key
