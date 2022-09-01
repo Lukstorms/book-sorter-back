@@ -5,13 +5,13 @@ const fazerBusca = async (req, res) => {
 
     try {
         const {data} = await axios.get(           
-           `http://openlibrary.org/subjects/${genero}.json?limit=100`
+           `http://openlibrary.org/subjects/${genero}.json?limit=100&details=true`
         );
 
         const alea = Math.floor(Math.random() * 100);
         const work = data.works[alea];
         
-        const bookDetails = await axios.get(`https://openlibrary.org${work.key}`).then(({data}) => {
+        const bookDetails = await axios.get(`https://openlibrary.org/works/${work.cover_edition_key}`).then(({data}) => {
             return data
         });
 
