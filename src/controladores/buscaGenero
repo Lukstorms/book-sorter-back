@@ -11,7 +11,7 @@ const fazerBusca = async (req, res) => {
         const alea = Math.floor(Math.random() * 100);
         const work = data.works[alea];
         
-        const bookDetails = await axios.get(`https://openlibrary.org/works/${work.cover_edition_key}`).then(({data}) => {
+        const bookDetails = await axios.get(`https://openlibrary.org${work.key}`).then(({data}) => {
             return data
         });
 
@@ -34,8 +34,6 @@ const fazerBusca = async (req, res) => {
         const result = {
             titulo: work.title,
             autor: work.authors[0].name,
-            primeira_publicacao: bookDetails.publish_date,
-            numero_paginas: bookDetails.number_of_pages,
             descricao: description,  
             id_capa: work.cover_id || null
         }
